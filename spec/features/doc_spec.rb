@@ -2,6 +2,11 @@ require 'rails_helper'
 
 RSpec.feature do
 
+  before do
+    @user = FactoryGirl.create(:user)
+    login_as(@user)
+  end
+
   describe 'index' do
     before do
       visit docs_path
@@ -60,9 +65,9 @@ RSpec.feature do
   end
 
   describe 'destroy' do
+    it 'can be destroyed' do
 
-    it 'can be destroy' do
-      doc_to_delete = Doc.create(title: "This will be deleted", content: "This document will be deleted")
+      doc_to_delete = Doc.create(title: "This will be deleted", content: "This document will be deleted", user: @user)
 
       visit docs_path
       click_link("This will be deleted")
