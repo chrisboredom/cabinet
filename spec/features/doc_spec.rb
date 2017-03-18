@@ -24,7 +24,6 @@ RSpec.feature do
       expect(page).to have_text(doc.title)
       expect(page).to have_content(second_doc.title)
     end
-
   end
 
   describe 'creation' do
@@ -42,6 +41,33 @@ RSpec.feature do
       click_on "Create Doc"
 
       expect(page).to have_content("Document has been created successfully")
+    end
+  end
+
+  describe 'edit' do
+
+    it 'can be edited' do
+      doc = FactoryGirl.create(:doc)
+
+      visit edit_doc_path(doc)
+
+      fill_in "Title", with: "Edited document"
+      fill_in "Content", with: "This document has been edited"
+      click_on "Update Doc"
+
+      expect(page).to have_content("This document has been edited")
+    end
+  end
+
+  describe 'destroy' do
+
+    it 'can be destroy' do
+      doc_to_delete = Doc.create(title: "This will be deleted", content: "This document will be deleted")
+
+      visit docs_path
+      click_link("This will be deleted")
+      click_link("Trash it")
+      expect(page.status_code).to eq(200)
     end
   end
 end
